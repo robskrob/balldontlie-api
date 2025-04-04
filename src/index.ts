@@ -34,6 +34,10 @@ const findTeamByName = (teamsList: Team[], teamName: string) => {
     const teamsList: Team[] = await lsa.fetchResource("https://api.balldontlie.io/v1/teams")
 
     const team: Team = findTeamByName(teamsList, teamName)
+    
+    if (!team) {
+      throw new Error(`Can not find team, ${process.argv.slice(2)[0]}`)
+    }
 
     const players: Player[] = await lsa.fetchResource(`https://api.balldontlie.io/v1/players?team_ids[]=${team.id}`)
 
@@ -42,8 +46,8 @@ const findTeamByName = (teamsList: Team[], teamName: string) => {
     console.log("Draft Rounds: ", result)
 
 
-  } catch (e: any) {
-    console.log("the error", e)
+  } catch (error) {
+    console.log(error)
   } 
 
 })()
