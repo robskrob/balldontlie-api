@@ -11,7 +11,7 @@ export default class HttpClient {
     return await this.client(url, {
       method: "GET",
       headers: {
-        'Authorization': this.apiKey || '', // Use "Bearer" or "Basic" as needed
+        'Authorization': this.apiKey || '',
         'Content-Type': 'application/json'
       }
     })
