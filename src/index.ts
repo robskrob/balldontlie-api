@@ -4,17 +4,6 @@ import draftRoundInformation from "./draft-round-information"
 import { DraftRoundInformation, Player, Team } from "./types"
 
 
-// INPUT
-
-// Today there is a business need for us to look into how many first round and second round players there are for a given team. 
-// This data is important as it shows how the team has been performing with their player picks in the NBA draft. 
-// So, we are looking for a consolidated data to see how many players are from round 1 and round 2.
-
-// OUTPUT
-
-// Team Name: Golden State Warriors
-// Draft Rounds: {"1": 13, "2": 7, "null": 5}
-
 const findTeamByName = (teamsList: Team[], teamName: string) => {
   return teamsList.find((t: any) => {
     return t.full_name.toLowerCase().includes(teamName)
@@ -22,8 +11,6 @@ const findTeamByName = (teamsList: Team[], teamName: string) => {
 }
 
 (async () => {
-
-  console.log("process argv", process.argv.slice(2))
 
   const teamName = process.argv.slice(2)[0].toLowerCase()
 
