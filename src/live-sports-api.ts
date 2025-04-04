@@ -1,7 +1,9 @@
-export default class LiveSportsApi {
-  httpClient: any;
+import HttpClient from "./http-client"
 
-  constructor(httpClient: any) {
+export default class LiveSportsApi {
+  httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
     this.httpClient = httpClient
   }
 

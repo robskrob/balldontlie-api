@@ -1,24 +1,7 @@
 import HttpClient from "./http-client"
 import LiveSportsApi from "./live-sports-api"
-
-// async function fetchResource(url: string): Promise<any> {
-//   const response =  await fetch(url, {
-//     method: "GET",
-//     headers: {
-//       'Authorization': process.env.API_KEY || '', // Use "Bearer" or "Basic" as needed
-//       'Content-Type': 'application/json'
-//     }
-//   })
-
-//   const jsonResponse = await response.json();
-
-//   if (jsonResponse) {
-//     return jsonResponse.data
-//   } else {
-//     return []
-//   }
-// }
-
+import draftRoundInformation from "./draft-round-information"
+import { DraftRoundInformation, Player, Team } from "./types"
 
 
 // INPUT
@@ -32,17 +15,10 @@ import LiveSportsApi from "./live-sports-api"
 // Team Name: Golden State Warriors
 // Draft Rounds: {"1": 13, "2": 7, "null": 5}
 
-const draftRoundInformation = (players: any) => {
-  return players.reduce((acc: any, player: any) => {
-
-    if (acc.hasOwnProperty(player.draft_round)) {
-      acc[player.draft_round] ++
-    } else {
-      acc["null"] ++
-    }
-
-    return acc;
-  }, {"1": 0, "2": 0, "null": 0})
+const findTeamByName = (teamsList: Team[], teamName: string) => {
+  return teamsList.find((t: any) => {
+    return t.full_name.toLowerCase().includes(teamName)
+  })
 }
 
 (async () => {
@@ -52,22 +28,16 @@ const draftRoundInformation = (players: any) => {
   const teamName = process.argv.slice(2)[0].toLowerCase()
 
   try {
-    // const teamsList: any = await fetchResource("https://api.balldontlie.io/v1/teams")
 
     const httpClient = new HttpClient(process.env.API_KEY || '')
     const lsa = new LiveSportsApi(httpClient)
-    const teamsList = await lsa.fetchResource("https://api.balldontlie.io/v1/teams")
+    const teamsList: Team[] = await lsa.fetchResource("https://api.balldontlie.io/v1/teams")
 
-    const team: any = teamsList.find((t: any) => {
-      return t.full_name.toLowerCase().includes(teamName)
-    })
+    const team: Team = findTeamByName(teamsList, teamName)
 
+    const players: Player[] = await lsa.fetchResource(`https://api.balldontlie.io/v1/players?team_ids[]=${team.id}`)
 
-    // const players: any = await fetchResource(`https://api.balldontlie.io/v1/players?team_ids[]=${team.id}`)
-    const players = await lsa.fetchResource(`https://api.balldontlie.io/v1/players?team_ids[]=${team.id}`)
-
-
-    const result: any = draftRoundInformation(players)
+    const result: DraftRoundInformation = draftRoundInformation(players)
     console.log("Team Name: ", team.full_name)
     console.log("Draft Rounds: ", result)
 

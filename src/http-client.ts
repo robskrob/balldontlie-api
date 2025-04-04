@@ -1,6 +1,6 @@
 export default class HttpClient {
   apiKey: string
-  client: any;
+  client: typeof fetch;
 
   constructor(apiKey: string, options: any = {}) {
     this.client = options.client || fetch
