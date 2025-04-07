@@ -4,17 +4,17 @@ export default class PrintTeamDraftRoundInformation {
   draftRoundInformation: any;;
   liveSportsApi: any;
   teamName: string;
-  teamsUrl: string;
+  baseUrl: string;
 
-  constructor(draftRoundInformation: any, liveSportsApi: any, teamName: string, teamsUrl: string) {
+  constructor(draftRoundInformation: any, liveSportsApi: any, teamName: string, baseUrl: string) {
     this.draftRoundInformation = draftRoundInformation
     this.liveSportsApi = liveSportsApi
     this.teamName = teamName || ''
-    this.teamsUrl = teamsUrl || ''
+    this.baseUrl = baseUrl || ''
   }
 
   async run() {
-    const teamsList: Team[] = await this.liveSportsApi.fetchResource(this.teamsUrl)
+    const teamsList: Team[] = await this.liveSportsApi.fetchResource(`${this.baseUrl}/teams`)
 
     const team: Team = this.findTeamByName(teamsList, this.teamName)
     
@@ -22,7 +22,7 @@ export default class PrintTeamDraftRoundInformation {
       throw new Error(`Can not find team, ${process.argv.slice(2)[0]}`)
     }
 
-    const players: Player[] = await this.liveSportsApi.fetchResource(`https://api.balldontlie.io/v1/players?team_ids[]=${team.id}`)
+    const players: Player[] = await this.liveSportsApi.fetchResource(`${this.baseUrl}/players?team_ids[]=${team.id}`)
 
     const result: DraftRoundInformation = this.draftRoundInformation(players)
     console.log("Team Name: ", team.full_name)

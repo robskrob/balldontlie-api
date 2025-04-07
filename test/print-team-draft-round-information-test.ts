@@ -8,7 +8,7 @@ import { DraftRoundInformation, Player, Team } from "../src/types"
 import players from "./data/players"
 import teams from "./data/teams"
 
-describe.only("PrintTeamDraftRoundInformation", () => {
+describe("PrintTeamDraftRoundInformation", () => {
   let mock;
   let draftRoundInformationStub: sinon.SinonStub
   let consoleLogStub: sinon.SinonStub
@@ -30,7 +30,7 @@ describe.only("PrintTeamDraftRoundInformation", () => {
       draftRoundInformationStub,
       liveSportsApi,
       "lakers",
-      "https://api.example.com/teams"
+      "https://api.example.com"
     )
   })
 
@@ -40,7 +40,7 @@ describe.only("PrintTeamDraftRoundInformation", () => {
 
   it("should fetch teams and players and log correct output", async () => {
     mock.expects("fetchResource").withArgs("https://api.example.com/teams").resolves(teams);
-    mock.expects("fetchResource").withArgs("https://api.balldontlie.io/v1/players?team_ids[]=14").resolves(players)
+    mock.expects("fetchResource").withArgs("https://api.example.com/players?team_ids[]=14").resolves(players)
 
     await instance.run()
 

@@ -5,12 +5,6 @@ import draftRoundInformation from "./draft-round-information"
 import { DraftRoundInformation, Player, Team } from "./types"
 
 
-const findTeamByName = (teamsList: Team[], teamName: string) => {
-  return teamsList.find((t: any) => {
-    return t.full_name.toLowerCase().includes(teamName)
-  })
-}
-
 (async () => {
 
   const teamName = process.argv.slice(2)[0].toLowerCase()
@@ -23,7 +17,7 @@ const findTeamByName = (teamsList: Team[], teamName: string) => {
       draftRoundInformation,
       liveSportsApi,
       teamName,
-      "https://api.balldontlie.io/v1/teams"
+      "https://api.balldontlie.io/v1"
     )
 
     printInformation.run()
